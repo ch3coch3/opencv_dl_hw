@@ -10,15 +10,17 @@ class Main(QMainWindow, gui.Ui_MainWindow):
     def retranslateUi(self, MainWindow):
         super().retranslateUi(MainWindow)
         self.gaussian_blur.clicked.connect(self.Openclick)
-        # self.SobelX.clicked.connect(self.Openclick2)
-        # self.SobelY.clicked.connect(self.Openclick3)
-        # self.magnitude.clicked.connect(self.Openclick3)
+        self.SobelX.clicked.connect(self.Openclick2)
+        self.SobelY.clicked.connect(self.Openclick3)
+        self.magnitude.clicked.connect(self.Openclick4)
     def Openclick(self):
         P3.p1()
-    # def Openclick2(self):
-    #     P2.p2()
-    # def Openclick3(self):
-    #     P2.p3()
+    def Openclick2(self):
+        P3.p2()
+    def Openclick3(self):
+        P3.p3()
+    def Openclick4(self):
+        P3.p4()
 
 if __name__ == "__main__":
     import sys
