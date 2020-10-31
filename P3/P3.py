@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
-import Pillow as image
-
+import matplotlib.pyplot as plt
 
 def conv2d(ori,kernal):
     ori = np.pad(ori,1,'constant',constant_values = 0)
@@ -15,20 +14,25 @@ def conv2d(ori,kernal):
             result[i,j] = int(ori_2)
     return result
 
-img = cv2.imread("opencv_dl_hw\Dataset_opencvdl\Q3_Image\Chihiro.jpg")
-# filter
-x,y = np.mgrid[-1:2, -1:2]
-gaussian_kernal = np.exp(-(x**2 + y**2))
-gaussian_kernal = gaussian_kernal / gaussian_kernal.sum()
+def p1():
+    img = cv2.imread("opencv_dl_hw\Dataset_opencvdl\Q3_Image\Chihiro.jpg")
+    # filter
+    sigma = 2
+    x,y = np.mgrid[-1:2, -1:2]
+    gaussian_kernal = np.exp(-(x**2 + y**2))/sigma**2
+    gaussian_kernal = gaussian_kernal / gaussian_kernal.sum()
 
-# tranfer to gray scale
-gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
-gaussian = conv2d(gray,gaussian_kernal)
-print(gray)
-print(gaussian)
-# convolution
-gaussian = image.formarray(gaussian,'gray')
-cv2.imshow("gray",gray)
-cv2.imshow("gaussian",gaussian)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    # tranfer to gray scale
+    gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
+    # convolution
+    gaussian = conv2d(gray,gaussian_kernal)
+    # plot figure
+    plt.figure(1)
+    plt.imshow(gaussian,cmap=plt.get_cmap('gray'))
+    plt.title("original")
+    plt.figure(2)
+    plt.imshow(gray,cmap=plt.get_cmap('gray'))
+    plt.axis('off')
+    plt.margins(0,0)
+    plt.savefig("opencv_dl_hw/P3/Gaussian.png",bbox_inches = 'tight',dpi = 300,pad_inches = 0.0)
+    plt.show()
