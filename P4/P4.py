@@ -2,7 +2,8 @@ import cv2
 import numpy as np
 
 def open():
-    img = cv2.imread("opencv_dl_hw\Dataset_opencvdl\Q4_Image\Parrot.png")
+    # img = cv2.imread("opencv_dl_hw\Dataset_opencvdl\Q4_Image\Parrot.png")
+    img = cv2.imread("Q4_Image\Parrot.png")
     cv2.imshow("original",img)
 
 
@@ -11,7 +12,7 @@ def p(angle,scale,tx,ty):
     scale = eval(scale)
     tx = eval(tx)
     ty = eval(ty)
-    img = cv2.imread("opencv_dl_hw\Dataset_opencvdl\Q4_Image\Parrot.png")
+    img = cv2.imread("Q4_Image\Parrot.png")
     row,col = img.shape[:2]
 
     # transformation

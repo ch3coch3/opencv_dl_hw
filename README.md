@@ -1,5 +1,7 @@
 # 使用說明
 
+到每個子題的資料夾內執行main.py檔即可
+
 ## P3
 + [numpy 使用1](https://www.w3schools.com/python/numpy_creating_arrays.asp)
 + [numpy 使用2](https://www.brilliantcode.net/1062/numpy-tutorial-basic-operations/)

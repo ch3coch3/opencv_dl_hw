@@ -14,7 +14,7 @@ def conv2d(ori,kernal):
     return result
 
 def p1():
-    img = cv2.imread("opencv_dl_hw\Dataset_opencvdl\Q3_Image\Chihiro.jpg")
+    img = cv2.imread("Q3_Image\Chihiro.jpg")
     # filter
     sigma = 1
     x,y = np.mgrid[-1:2, -1:2]
@@ -29,13 +29,13 @@ def p1():
     gaussian = np.asarray(gaussian,dtype=np.uint8)
     
     # plot figure
-    cv2.imwrite("opencv_dl_hw/P3/Gaussian.png",gaussian)
+    cv2.imwrite("Gaussian.png",gaussian)
     cv2.imshow("gray",gray)
     cv2.imshow("gaussian",gaussian)
 
 
 def p2():
-    img = cv2.imread("opencv_dl_hw\P3\Gaussian.png")
+    img = cv2.imread("Gaussian.png")
     # img = np.asarray(img, dtype=np.int64)
     # filter
     sobelX_filter = np.array([[-1,0,1],[-2,0,2],[-1,0,1]])
@@ -48,7 +48,7 @@ def p2():
     cv2.imshow("SobelX",sobelX)
 
 def p3():
-    img = cv2.imread("opencv_dl_hw\P3\Gaussian.png")
+    img = cv2.imread("Gaussian.png")
     # filter
     sobelY_filter = np.array([[1,2,1],[0,0,0],[-1,-2,-1]])
     # tranfer to gray scale
@@ -60,7 +60,7 @@ def p3():
     cv2.imshow("SobelY",sobelY)
 
 def p4():
-    img = cv2.imread("opencv_dl_hw\P3\Gaussian.png")
+    img = cv2.imread("Gaussian.png")
     # filter
     sobelX_filter = np.array([[-1,0,1],[-2,0,2],[-1,0,1]])
     sobelY_filter = np.array([[1,2,1],[0,0,0],[-1,-2,-1]])
