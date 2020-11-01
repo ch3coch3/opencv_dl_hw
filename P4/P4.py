@@ -17,7 +17,7 @@ def p(angle,scale,tx,ty):
 
     # transformation
     trans = np.float32([[1,0,tx],[0,1,ty]])
-    res = cv2.warpAffine(img,trans,(row,col))
+    res = cv2.warpAffine(img,trans,(col,row))
 
     # Rotation
     ro = cv2.getRotationMatrix2D((160,84),angle,scale)
