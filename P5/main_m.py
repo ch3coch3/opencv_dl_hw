@@ -1,13 +1,13 @@
 import torch
-import random
-from torch import nn,optim
-import torch.nn.functional as F
-from torch.utils.data.sampler import SubsetRandomSampler
+import torch.nn as nn
+import torch.optim as optim
 import torchvision
-from torch.utils.data import DataLoader
-import torchvision.datasets as datasets
 import torchvision.transforms as transforms
+from torch.utils.data import DataLoader, DataLoader, SubsetRandomSampler
+from torchsummary import summary
 
+import numpy as np
+import random
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
