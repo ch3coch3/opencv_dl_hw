@@ -1,121 +1,60 @@
-import os
-import numpy as np
 import cv2
-import random as ran
-import tensorflow as tf
-from keras.datasets import cifar10
-from keras.layers import Conv2D, MaxPooling2D, Dropout, Flatten, Dense
-from keras import models, optimizers, regularizers
-from keras.callbacks import LearningRateScheduler
+from vgg import vgg16
+import random
+import torchvision
+import torchvision.datasets as datasets
+from torch.utils.data import DataLoader
+from torchsummary import summary
+from torchvision import transforms
+import matplotlib.pyplot as plt
+import numpy as np
 
-weight_decay = 5e-4
-batch_size = 32
-learning_rate = 0.001
-dropout_rate = 0.5
-optimizer = 'SGD'
-epoch_num = 20
+def showTrainImage():
+    mean, std = (0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)
 
-def VGG16():
-    model = models.Sequential()
-    model.add(Conv2D(64, (3, 3), activation='relu', padding='same', input_shape=(32, 32, 3), kernel_regularizer=regularizers.l2(weight_decay)))
-    model.add(Conv2D(64, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-    model.add(MaxPooling2D((2, 2)))
+    label = ['airplane','automobile','bird','cat','deer',
+            'dog','frog','horse','ship','truck']
+    path = './CIFAR10/'
+    train_transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean=mean, std=std)
+    ])
 
-    model.add(Conv2D(128, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-    model.add(Conv2D(128, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-    model.add(MaxPooling2D((2, 2)))
+    train_dataset = torchvision.datasets.CIFAR10(root=path, train=True, transform=train_transform, download=True)
+    train_loader = DataLoader(train_dataset, batch_size=10000, shuffle=True)
+    pics = enumerate(train_loader)
+    batch_idx, (data, labels) = next(pics)
+    fig = plt.figure('10 Random Images')
+    for i in range(10):
+        index = random.randint(0, 10000)
+        plt.subplot(1, 10, i+1)
+        plt.tight_layout()
+        plt.imshow(data[index][0], cmap='gray', interpolation='none')
+        plt.title("{}".format(labels[index]))
+        plt.xticks([])
+        plt.yticks([])
+    plt.show()
 
-    model.add(Conv2D(256, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-    model.add(Conv2D(256, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-    model.add(Conv2D(256, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-    model.add(MaxPooling2D((2, 2)))
-
-    model.add(Conv2D(512, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-    model.add(Conv2D(512, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-    model.add(Conv2D(512, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-    model.add(MaxPooling2D((2, 2)))
-
-    model.add(Conv2D(512, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-    model.add(Conv2D(512, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-    model.add(Conv2D(512, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-
-    model.add(Flatten())  # 2*2*512
-    model.add(Dense(4096, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(4096, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(10, activation='softmax'))
-
-    return model
-
-def scheduler(epoch):
-    if epoch < epoch_num * 0.4:
-        return learning_rate
-    if epoch < epoch_num * 0.8:
-        return learning_rate * 0.1
-    return learning_rate * 0.01
-
-
-if __name__ == '__main__':
-    
-    # label = {
-    #     0:"airplane",
-    #     1:"automobile",
-    #     2:"bird",
-    #     3:"cat",
-    #     4:"deer",
-    #     5:"dog",
-    #     6:"frog",
-    #     7:"horse",
-    #     8:"ship",
-    #     9:"truck"
-    # }
-    label = {
-        '0':"airplane",
-        '1':"automobile",
-        '2':"bird",
-        '3':"cat",
-        '4':"deer",
-        '5':"dog",
-        '6':"frog",
-        '7':"horse",
-        '8':"ship",
-        '9':"truck"
-    }
-    (x_train,y_train),(x_test,y_test) = cifar10.load_data()
-    y_train = tf.keras.utils.to_categorical(y_train, 10)
-    y_test = tf.keras.utils.to_categorical(y_test, 10)
-    print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
-    # # d = np.array(y_train.copy(),dtype='int8')
-    # # print(d)
-    # for i in range(10):
-    #     r = ran.randint(0,9)
-    #     cv2.imshow(label[d],x_train[r])
-    #     print(label[y_train[r]])
-    #     print(y_train[r])
-        
-
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-    # y_train = tf.keras.utils.to_categorical(y_train, 10)
-    # print(y_train)
-
-    # batch_size = 32
-    # learning_rate = 0.001
-    # optimizer = 'SGD'
+def showParameter():
     print("hyperparameters:")
-    print("batch size:",batch_size)
-    print("learning rate:",learning_rate)
-    print("optimizer:",optimizer)
+    print("batch size:",32)
+    print("learning rate:", 0.001)
+    print("optimizer:","SGD")
 
-    # get model
-    model = VGG16()
+def showmodel():
+    network = vgg16(num_classes=10)
+    network = network.cuda()
+    summary(network, (3, 224, 224))
+    # print(network)
 
-    # show model
-    model.summary()
+def showAcc():
+    img = cv2.imread('acc_loss.png')
+    dim = img.shape
+    img = cv2.resize(img, (int(dim[1]/5),int(dim[0]/5)))
+    # cv2.resizeWindow(img,60,60)
+    cv2.imshow("loss image",img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
-    # train
-    sgd = optimizers.SGD(lr=learning_rate, momentum=0.9, nesterov=True)
-    change_lr = LearningRateScheduler(scheduler)
-    model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
-    model.fit(x_train,y_train,batch_size=batch_size,epochs=epoch_num,callbacks=[change_lr] ,validation_data=(x_test,y_test))
+def test():
+    
