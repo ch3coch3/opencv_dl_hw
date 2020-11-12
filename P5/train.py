@@ -139,7 +139,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
-    train_transform = transforms.Compose(
+    train_transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean=mean, std=std)
     ])
