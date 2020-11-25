@@ -9,6 +9,7 @@ import torchsummary as summary
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import numpy as np
+import os
 mean, std = (0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)
 
 train_loss_list = []
@@ -87,7 +88,7 @@ def validate(model,loader):
 
 
 
-def accuraccy(self, outputs, targets):
+def accuraccy(outputs, targets):
     predictions = outputs.argmax(dim=1)
     correct = float(predictions.eq(targets).cpu().sum())
     acc = 100 * correct / targets.size(0)
@@ -113,16 +114,20 @@ if __name__ == "__main__":
     else:
         key = "cpu"
     device = torch.device(key)
-
+    path = './CIFAR10/'
+    if os.path.exists(path + 'cifar-10-batches-py'):
+        download = False
+    else:
+        download = True
     # data
     train_data = torchvision.datasets.CIFAR10('./CIFAR10/',
                                             train=True,
                                             transform=transform,
-                                            download=True)
+                                            download=download)
     test_data = torchvision.datasets.CIFAR10('./CIFAR10/',
                                             train=False,
                                             transform=transform,
-                                            download=True)
+                                            download=download)
 
     # dataLoader
     train_loader = DataLoader(train_data, batch_size=batch_size,shuffle=True,num_workers=4)
